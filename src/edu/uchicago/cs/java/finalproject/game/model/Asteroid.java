@@ -1,6 +1,7 @@
 package edu.uchicago.cs.java.finalproject.game.model;
 
 
+import java.awt.*;
 import java.util.Arrays;
 
 import edu.uchicago.cs.java.finalproject.controller.Game;
@@ -46,8 +47,8 @@ public class Asteroid extends Sprite {
 		//an nSize of zero is a big asteroid
 		//a nSize of 1 or 2 is med or small asteroid respectively
 		if (nSize == 0)
-			setRadius(RAD);
-		else
+            setRadius(RAD);
+        else
 			setRadius(RAD/(nSize * 2));
 		
 
@@ -57,39 +58,39 @@ public class Asteroid extends Sprite {
 	
 	
 	public Asteroid(Asteroid astExploded){
-	
 
-		//call Sprite constructor
-		super();
-		
-		int  nSizeNew =	astExploded.getSize() + 1;
-		
-		
-		//the spin will be either plus or minus 0-9
-		int nSpin = Game.R.nextInt(10);
-		if(nSpin %2 ==0)
-			nSpin = -nSpin;
-		setSpin(nSpin);
-			
-		//random delta-x
-		int nDX = Game.R.nextInt(10 + nSizeNew*2);
-		if(nDX %2 ==0)
-			nDX = -nDX;
-		setDeltaX(nDX);
-		
-		//random delta-y
-		int nDY = Game.R.nextInt(10+ nSizeNew*2);
-		if(nDY %2 ==0)
-			nDY = -nDY;
-		setDeltaY(nDY);
-			
-		assignRandomShape();
-		
-		//an nSize of zero is a big asteroid
-		//a nSize of 1 or 2 is med or small asteroid respectively
 
-		setRadius(RAD/(nSizeNew * 2));
-		setCenter(astExploded.getCenter());
+        //call Sprite constructor
+        super();
+
+        int  nSizeNew =	astExploded.getSize() + 1;
+
+
+        //the spin will be either plus or minus 0-9
+        int nSpin = Game.R.nextInt(10);
+        if(nSpin %2 ==0)
+            nSpin = -nSpin;
+        setSpin(nSpin);
+
+        //random delta-x
+        int nDX = Game.R.nextInt(10 + nSizeNew*2);
+        if(nDX %2 ==0)
+            nDX = -nDX;
+        setDeltaX(nDX);
+
+        //random delta-y
+        int nDY = Game.R.nextInt(10+ nSizeNew*2);
+        if(nDY %2 ==0)
+            nDY = -nDY;
+        setDeltaY(nDY);
+
+        assignRandomShape();
+
+        //an nSize of zero is a big asteroid
+        //a nSize of 1 or 2 is med or small asteroid respectively
+
+        setRadius(RAD/(nSizeNew * 2));
+        setCenter(astExploded.getCenter());
 		
 		
 		
@@ -117,10 +118,12 @@ public class Asteroid extends Sprite {
 
 	//overridden
 	public void move(){
-		super.move();
-		
-		//an asteroid spins, so you need to adjust the orientation at each move()
-		setOrientation(getOrientation() + getSpin());
+        if(Game.getTick() % 3 ==0) {
+            super.move();
+
+            //an asteroid spins, so you need to adjust the orientation at each move()
+            setOrientation(getOrientation() + getSpin());
+        }
 		
 	}
 

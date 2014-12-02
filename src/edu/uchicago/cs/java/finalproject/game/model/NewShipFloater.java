@@ -17,20 +17,34 @@ public class NewShipFloater extends Sprite {
 		super();
 
 		ArrayList<Point> pntCs = new ArrayList<Point>();
-		// top of ship
-		pntCs.add(new Point(5, 5));
-		pntCs.add(new Point(4,0));
-		pntCs.add(new Point(5, -5));
-		pntCs.add(new Point(0,-4));
-		pntCs.add(new Point(-5, -5));
-		pntCs.add(new Point(-4,0));
-		pntCs.add(new Point(-5, 5));
-		pntCs.add(new Point(0,4));
 
-		assignPolarPoints(pntCs);
+        pntCs.add(new Point(0, 18));
+        // top of ship
+        pntCs.add(new Point(3, 3));
+        pntCs.add(new Point(12, 0));
+        pntCs.add(new Point(13, -2));
+        pntCs.add(new Point(13, -4));
+        pntCs.add(new Point(11, -2));
+        pntCs.add(new Point(4, -3));
+        pntCs.add(new Point(2, -10));
+        pntCs.add(new Point(4, -12));
+        pntCs.add(new Point(2, -13));
+
+        //left points
+        pntCs.add(new Point(-2, -13));
+        pntCs.add(new Point(-4, -12));
+        pntCs.add(new Point(-2, -10));
+        pntCs.add(new Point(-4, -3));
+        pntCs.add(new Point(-11, -2));
+        pntCs.add(new Point(-13, -4));
+        pntCs.add(new Point(-13, -2));
+        pntCs.add(new Point(-12, 0));
+        pntCs.add(new Point(-3, 3));
+
+        assignPolarPoints(pntCs);
 
 		setExpire(250);
-		setRadius(50);
+		setRadius(40);
 		setColor(Color.BLUE);
 
 
@@ -95,7 +109,7 @@ public class NewShipFloater extends Sprite {
 		//fill this polygon (with whatever color it has)
 		g.fillPolygon(getXcoords(), getYcoords(), dDegrees.length);
 		//now draw a white border
-		g.setColor(Color.WHITE);
+		g.setColor(Color.white);
 		g.drawPolygon(getXcoords(), getYcoords(), dDegrees.length);
 	}
 

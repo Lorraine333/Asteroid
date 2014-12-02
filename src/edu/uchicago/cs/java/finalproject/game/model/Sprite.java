@@ -19,7 +19,7 @@ public abstract class Sprite implements Movable {
 
 	//the radius of circumscibing circle
 	private int nRadius;
-	//is this DEBRIS, FRIEND, FOE, OR FLOATER 
+	//is this DEBRIS, FRIEND, FOE, OR FLOATER
 	//private byte yFriend;
 	//degrees (where the sprite is pointing out of 360)
 	private int nOrientation;
@@ -54,7 +54,6 @@ public abstract class Sprite implements Movable {
 		//this just keeps the sprite inside the bounds of the frame
 		if (pnt.x > getDim().width) {
 			setCenter(new Point(1, pnt.y));
-
 		} else if (pnt.x < 0) {
 			setCenter(new Point(getDim().width - 1, pnt.y));
 		} else if (pnt.y > getDim().height) {
@@ -245,13 +244,13 @@ public abstract class Sprite implements Movable {
 
 		int nC = 0;
 		for (Point pnt : pntPoints) {
-			if (pnt.x == 0 && pnt.y > 0) {
+			//if (pnt.x == 0 && pnt.y > 0) {
 				dLens[nC] = hypot(pnt.x, pnt.y) / dL;
-			} else if (pnt.x < 0 && pnt.y > 0) {
+			//} else if (pnt.x < 0 && pnt.y > 0) {
 				dLens[nC] = hypot(pnt.x, pnt.y) / dL;
-			} else {
+			//} else {
 				dLens[nC] = hypot(pnt.x, pnt.y) / dL;
-			}
+			//}
 			nC++;
 		}
 
@@ -282,7 +281,8 @@ public abstract class Sprite implements Movable {
             nXCoords[nC] =    (int) (getCenter().x + getRadius() 
                             * dLengths[nC] 
                             * Math.sin(Math.toRadians(getOrientation()) + dDegrees[nC]));
-            nYCoords[nC] =    (int) (getCenter().y - getRadius()
+
+             nYCoords[nC] =    (int) (getCenter().y - getRadius()
                             * dLengths[nC]
                             * Math.cos(Math.toRadians(getOrientation()) + dDegrees[nC]));
             

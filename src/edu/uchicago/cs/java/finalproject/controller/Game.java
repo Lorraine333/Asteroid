@@ -1,5 +1,6 @@
 package edu.uchicago.cs.java.finalproject.controller;
 
+import org.omg.CORBA.CODESET_INCOMPATIBLE;
 import sun.audio.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -7,6 +8,7 @@ import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.sound.sampled.Clip;
+import javax.swing.*;
 
 import edu.uchicago.cs.java.finalproject.game.model.*;
 import edu.uchicago.cs.java.finalproject.game.view.*;
@@ -22,14 +24,14 @@ public class Game implements Runnable, KeyListener {
 	// FIELDS
 	// ===============================================
 
-	public static final Dimension DIM = new Dimension(1100, 900); //the dimension of the game.
+	public static final Dimension DIM = new Dimension(1100, 700); //the dimension of the game.
 	private GamePanel gmpPanel;
 	public static Random R = new Random();
 	public final static int ANI_DELAY = 45; // milliseconds between screen
 											// updates (animation)
 	private Thread thrAnim;
 	private int nLevel = 1;
-	private int nTick = 0;
+	private static int nTick = 0;
 	private ArrayList<Tuple> tupMarkForRemovals;
 	private ArrayList<Tuple> tupMarkForAdds;
 	private boolean bMuted = true;
@@ -45,15 +47,15 @@ public class Game implements Runnable, KeyListener {
 			MUTE = 77, // m-key mute
 
 	// for possible future use
-	// HYPER = 68, 					// d key
-	// SHIELD = 65, 				// a key arrow
+	 Missile = 68, 					// d key
+	 SHIELD = 65, 				// a key arrow
 	// NUM_ENTER = 10, 				// hyp
 	 SPECIAL = 70; 					// fire special weapon;  F key
 
 	private Clip clpThrust;
 	private Clip clpMusicBackground;
 
-	private static final int SPAWN_NEW_SHIP_FLOATER = 1200;
+	private static final int SPAWN_NEW_SHIP_FLOATER = 120;
 
 
 
@@ -111,6 +113,13 @@ public class Game implements Runnable, KeyListener {
 		while (Thread.currentThread() == thrAnim) {
 			tick();
 			spawnNewShipFloater();
+            spawnShield();
+            spawnHyperSpace();
+            //spawnNuissance();
+            spawnGetMissiles();
+            //spawnUFOs();
+
+
 			gmpPanel.update(gmpPanel.getGraphics()); // update takes the graphics context we must 
 														// surround the sleep() in a try/catch block
 														// this simply controls delay time between 
@@ -136,6 +145,8 @@ public class Game implements Runnable, KeyListener {
 			}
 		} // end while
 	} // end run
+
+
 
 	private void checkCollisions() {
 
@@ -174,9 +185,11 @@ public class Game implements Runnable, KeyListener {
 					//falcon
 					if ((movFriend instanceof Falcon) ){
 						if (!CommandCenter.getFalcon().getProtected()){
-							tupMarkForRemovals.add(new Tuple(CommandCenter.movFriends, movFriend));
-							CommandCenter.spawnFalcon(false);
-							killFoe(movFoe);
+                            if(!CommandCenter.getFalcon().isbShield()) {
+                                tupMarkForRemovals.add(new Tuple(CommandCenter.movFriends, movFriend));
+                                CommandCenter.spawnFalcon(false);
+                                killFoe(movFoe);
+                            }
 						}
 					}
 					//not the falcon
@@ -194,7 +207,11 @@ public class Game implements Runnable, KeyListener {
 		}//end outer for
 
 
-		//check for collisions between falcon and floaters
+
+
+
+
+        //check for collisions between falcon and floaters
 		if (CommandCenter.getFalcon() != null){
 			Point pntFalCenter = CommandCenter.getFalcon().getCenter();
 			int nFalRadiux = CommandCenter.getFalcon().getRadius();
@@ -207,9 +224,32 @@ public class Game implements Runnable, KeyListener {
 	
 				//detect collision
 				if (pntFalCenter.distance(pntFloaterCenter) < (nFalRadiux + nFloaterRadiux)) {
-	
-					
-					tupMarkForRemovals.add(new Tuple(CommandCenter.movFloaters, movFloater));
+
+                    if (movFloater instanceof  NewShipFloater) {
+                        tupMarkForRemovals.add(new Tuple(CommandCenter.movFloaters, movFloater));
+                        CommandCenter.setNumFalcons(CommandCenter.getNumFalcons() + 1);
+                        // killFoe(movFoe);
+                    }
+                    else if(movFloater instanceof Shield)
+                    {
+                        tupMarkForRemovals.add(new Tuple(CommandCenter.movFloaters, movFloater));
+                        CommandCenter.getFalcon().setShield(CommandCenter.getFalcon().getShield()+1);
+                    }
+
+                    else if (movFloater instanceof HyperSpace)
+                    {
+                        tupMarkForRemovals.add(new Tuple(CommandCenter.movFloaters, movFloater));
+                        CommandCenter.getFalcon().setCenter(new Point(R.nextInt(Game.DIM.width), R.nextInt(Game.DIM.height)));
+                    }
+
+                    else if (movFloater instanceof GetMissiles)
+                    {
+                        tupMarkForRemovals.add(new Tuple(CommandCenter.movFloaters, movFloater));
+                        CommandCenter.getFalcon().setMissilesNumber(CommandCenter.getFalcon().getMissilesNumber()+1);
+                    }
+                    //not the falcon
+
+                    tupMarkForRemovals.add(new Tuple(CommandCenter.movFloaters, movFloater));
 					Sound.playSound("pacman_eatghost.wav");
 	
 				}//end if 
@@ -242,6 +282,7 @@ public class Game implements Runnable, KeyListener {
 				//spawn two medium Asteroids
 				tupMarkForAdds.add(new Tuple(CommandCenter.movFoes,new Asteroid(astExploded)));
 				tupMarkForAdds.add(new Tuple(CommandCenter.movFoes,new Asteroid(astExploded)));
+                tupMarkForRemovals.add(new Tuple(CommandCenter.movFoes, movFoe));
 				
 			} 
 			//medium size aseroid exploded
@@ -249,13 +290,64 @@ public class Game implements Runnable, KeyListener {
 				//spawn three small Asteroids
 				tupMarkForAdds.add(new Tuple(CommandCenter.movFoes,new Asteroid(astExploded)));
 				tupMarkForAdds.add(new Tuple(CommandCenter.movFoes,new Asteroid(astExploded)));
-				tupMarkForAdds.add(new Tuple(CommandCenter.movFoes,new Asteroid(astExploded)));
+                tupMarkForAdds.add(new Tuple(CommandCenter.movFoes,new Asteroid(astExploded)));
+                tupMarkForRemovals.add(new Tuple(CommandCenter.movFoes, movFoe));
 			}
-			//remove the original Foe	
-			tupMarkForRemovals.add(new Tuple(CommandCenter.movFoes, movFoe));
-		
+            else {
+                //remove the original Foe
+                tupMarkForRemovals.add(new Tuple(CommandCenter.movFoes, movFoe));
+                //tupMarkForAdds.add(new Tuple(CommandCenter.movDebris,new Explosion(astExploded)));
+                //tupMarkForAdds.add(new Tuple(CommandCenter.movDebris,new Debris(astExploded)));
+                for (int i = 0; i < 20; i++) {
+                    tupMarkForAdds.add(new Tuple(CommandCenter.movDebris,new Debris(astExploded)));
+                }
+
+                CommandCenter.setScore(CommandCenter.getScore() + 10);
+            }
 			
-		} 
+		}
+        else if(movFoe instanceof Nuissance)
+        {
+            Nuissance nuiExploded = (Nuissance)movFoe;
+
+            tupMarkForRemovals.add(new Tuple(CommandCenter.movFoes, movFoe));
+            //tupMarkForAdds.add(new Tuple(CommandCenter.movDebris,new Explosion(nuiExploded)));
+            CommandCenter.setScore(CommandCenter.getScore() + 20);
+
+        }
+        else if (movFoe instanceof UFOs)
+        {
+            UFOs UFOExploded = (UFOs) movFoe;
+
+
+            if(UFOExploded.getSize() == 0 ||UFOExploded.getSize() == 1){
+                tupMarkForAdds.add(new Tuple(CommandCenter.movFoes,new UFOs(UFOExploded)));
+                tupMarkForRemovals.add(new Tuple(CommandCenter.movFoes, movFoe));
+
+            }
+            //medium size aseroid exploded
+            else if(UFOExploded.getSize() == 2){
+                //spawn three small Asteroids
+                tupMarkForAdds.add(new Tuple(CommandCenter.movFoes,new UFOs(UFOExploded)));
+                tupMarkForAdds.add(new Tuple(CommandCenter.movFoes,new UFOs(UFOExploded)));
+                tupMarkForRemovals.add(new Tuple(CommandCenter.movFoes, movFoe));
+            }
+            else if (UFOExploded.getSize() ==3 ){
+                tupMarkForAdds.add(new Tuple(CommandCenter.movFoes,new UFOs(UFOExploded)));
+                tupMarkForAdds.add(new Tuple(CommandCenter.movFoes,new UFOs(UFOExploded)));
+                tupMarkForAdds.add(new Tuple(CommandCenter.movFoes,new UFOs(UFOExploded)));
+                tupMarkForRemovals.add(new Tuple(CommandCenter.movFoes, movFoe));
+
+            }
+            else {
+
+                tupMarkForAdds.add(new Tuple(CommandCenter.movDebris,new Explosion(UFOExploded)));
+                tupMarkForRemovals.add(new Tuple(CommandCenter.movFoes, movFoe));
+                CommandCenter.setScore(CommandCenter.getScore() + 30);
+            }
+
+
+        }
 		//not an asteroid
 		else {
 			//remove the original Foe
@@ -280,17 +372,56 @@ public class Game implements Runnable, KeyListener {
 			nTick++;
 	}
 
-	public int getTick() {
+	public static int getTick() {
 		return nTick;
 	}
 
+    private void spawnNuissance(){
+        if (nTick % 100 == 0){
+            CommandCenter.movFoes.add(new Nuissance());
+        }
+    }
 	private void spawnNewShipFloater() {
 		//make the appearance of power-up dependent upon ticks and levels
 		//the higher the level the more frequent the appearance
 		if (nTick % (SPAWN_NEW_SHIP_FLOATER - nLevel * 7) == 0) {
+        //if (nTick % 50 == 0){
 			CommandCenter.movFloaters.add(new NewShipFloater());
 		}
 	}
+
+    private void spawnHyperSpace() {
+        //make the appearance of power-up dependent upon ticks and levels
+        //the higher the level the more frequent the appearance
+        if (nTick % (SPAWN_NEW_SHIP_FLOATER - nLevel * 7) == 0) {
+            //if (nTick % 50 == 0){
+            CommandCenter.movFloaters.add(new HyperSpace());
+        }
+    }
+
+    private void spawnGetMissiles(){
+        if (nTick % (SPAWN_NEW_SHIP_FLOATER - nLevel * 7) == 0) {
+            //if (nTick % 50 == 0){
+            CommandCenter.movFloaters.add(new GetMissiles());
+        }
+    }
+
+    private void spawnShield() {
+        //make the appearance of power-up dependent upon ticks and levels
+        //the higher the level the more frequent the appearance
+        if (nTick % (SPAWN_NEW_SHIP_FLOATER - nLevel * 7) == 0) {
+            //if (nTick % 50 == 0){
+            CommandCenter.movFloaters.add(new Shield());
+        }
+    }
+
+    private void spawnUFOs(int number)
+    {
+        for (int i = 0; i <number ; i++) {
+            CommandCenter.movFoes.add(new UFOs(0));
+        }
+
+    }
 
 	// Called when user presses 's'
 	private void startGame() {
@@ -299,6 +430,7 @@ public class Game implements Runnable, KeyListener {
 		CommandCenter.setLevel(0);
 		CommandCenter.setPlaying(true);
 		CommandCenter.setPaused(false);
+        CommandCenter.setScore(0);//Score
 		//if (!bMuted)
 		   // clpMusicBackground.loop(Clip.LOOP_CONTINUOUSLY);
 	}
@@ -310,6 +442,7 @@ public class Game implements Runnable, KeyListener {
 			CommandCenter.movFoes.add(new Asteroid(0));
 		}
 	}
+
 	
 	
 	private boolean isLevelClear(){
@@ -321,6 +454,15 @@ public class Game implements Runnable, KeyListener {
 				bAsteroidFree = false;
 				break;
 			}
+            else if(movFoe instanceof Nuissance){
+                bAsteroidFree = false;
+                break;
+            }
+            else if (movFoe instanceof UFOs)
+            {
+                bAsteroidFree = false;
+                break;
+            }
 		}
 		
 		return bAsteroidFree;
@@ -335,7 +477,12 @@ public class Game implements Runnable, KeyListener {
 				CommandCenter.getFalcon().setProtected(true);
 			
 			spawnAsteroids(CommandCenter.getLevel() + 2);
+            spawnUFOs(CommandCenter.getLevel());
 			CommandCenter.setLevel(CommandCenter.getLevel() + 1);
+            CommandCenter.setScore(0);
+            if(CommandCenter.getLevel()>1) {
+                JOptionPane.showConfirmDialog(null, "Congratulations! Level "+CommandCenter.getLevel());
+            }
 
 		}
 	}
@@ -388,9 +535,10 @@ public class Game implements Runnable, KeyListener {
 				fal.rotateRight();
 				break;
 
+
 			// possible future use
 			// case KILL:
-			// case SHIELD:
+
 			// case NUM_ENTER:
 
 			default:
@@ -403,7 +551,7 @@ public class Game implements Runnable, KeyListener {
 	public void keyReleased(KeyEvent e) {
 		Falcon fal = CommandCenter.getFalcon();
 		int nKey = e.getKeyCode();
-		 System.out.println(nKey);
+		 //System.out.println(nKey);
 
 		if (fal != null) {
 			switch (nKey) {
@@ -413,10 +561,10 @@ public class Game implements Runnable, KeyListener {
 				break;
 				
 			//special is a special weapon, current it just fires the cruise missile. 
-			case SPECIAL:
-				CommandCenter.movFriends.add(new Cruise(fal));
-				//Sound.playSound("laser.wav");
-				break;
+//			case SPECIAL:
+//				CommandCenter.movFriends.add(new Cruise(fal));
+//				Sound.playSound("laser.wav");
+//				break;
 				
 			case LEFT:
 				fal.stopRotating();
@@ -426,8 +574,11 @@ public class Game implements Runnable, KeyListener {
 				break;
 			case UP:
 				fal.thrustOff();
+                fal.setDeltaY(0);
+                fal.setDeltaX(0);
 				clpThrust.stop();
 				break;
+
 				
 			case MUTE:
 				if (!bMuted){
@@ -439,7 +590,39 @@ public class Game implements Runnable, KeyListener {
 					bMuted = !bMuted;
 				}
 				break;
-				
+
+            case SHIELD:
+                if(!CommandCenter.getFalcon().isbShield() && CommandCenter.getFalcon().getShield()>0) {
+
+                    CommandCenter.getFalcon().setbShield(true);
+                    CommandCenter.getFalcon().setShieldTime(110);
+                    CommandCenter.getFalcon().setShield(CommandCenter.getFalcon().getShield() - 1);
+                    Sound.playSound("Tick.wav");
+                }
+                break;
+
+            case SPECIAL:
+                if(CommandCenter.getFalcon().getIntervalTime() < 0)
+                {
+                    CommandCenter.getFalcon().setbCruise(true);
+                    CommandCenter.getFalcon().setCruiseTime(50);
+                }
+                 break;
+
+            case Missile:
+                if(CommandCenter.getFalcon().getMissilesNumber() > 0) {
+                    CommandCenter.getFalcon().setbSuper(true);
+                    for (Movable movFoe : CommandCenter.movFoes) {
+                        if (movFoe instanceof Asteroid) {
+                            Asteroid astFire = (Asteroid) movFoe;
+                            CommandCenter.movFriends.add(new Missiles(astFire, CommandCenter.getFalcon()));
+                        }
+                    }
+
+                    CommandCenter.getFalcon().setMissilesNumber(CommandCenter.getFalcon().getMissilesNumber()-1);
+                }
+                break;
+
 				
 			default:
 				break;

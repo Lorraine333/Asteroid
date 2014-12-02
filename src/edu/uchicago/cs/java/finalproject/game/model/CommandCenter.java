@@ -23,7 +23,12 @@ public class CommandCenter {
 	
 
 	// Constructor made private - static Utility class only
-	private CommandCenter() {}
+	private CommandCenter() {
+        setLevel(1);
+        setScore(0);
+        setNumFalcons(3);
+        spawnFalcon(true);
+    }
 	
 	public static void initGame(){
 		setLevel(1);
@@ -129,6 +134,8 @@ public class CommandCenter {
 	public static CopyOnWriteArrayList<Movable> getMovFloaters() {
 		return movFloaters;
 	}
+
+
 
 
 	

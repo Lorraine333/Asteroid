@@ -9,18 +9,23 @@ import java.awt.Image;
 import java.awt.Panel;
 import java.awt.Point;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.imageio.ImageIO;
+import javax.print.attribute.standard.SheetCollate;
 import javax.swing.JFrame;
 
 
 import edu.uchicago.cs.java.finalproject.controller.Game;
-import edu.uchicago.cs.java.finalproject.game.model.CommandCenter;
-import edu.uchicago.cs.java.finalproject.game.model.Falcon;
-import edu.uchicago.cs.java.finalproject.game.model.Movable;
+import edu.uchicago.cs.java.finalproject.game.model.*;
+import sun.tools.tree.ShiftLeftExpression;
 
 
- public class GamePanel extends Panel {
+public class GamePanel extends Panel {
 	
 	// ==============================================================
 	// FIELDS 
@@ -38,6 +43,9 @@ import edu.uchicago.cs.java.finalproject.game.model.Movable;
 	private int nFontWidth;
 	private int nFontHeight;
 	private String strDisplay = "";
+
+    private BufferedImage myImage;
+
 	
 
 	// ==============================================================
@@ -65,11 +73,12 @@ import edu.uchicago.cs.java.finalproject.game.model.Movable;
 	private void drawScore(Graphics g) {
 		g.setColor(Color.white);
 		g.setFont(fnt);
-		if (CommandCenter.getScore() != 0) {
-			g.drawString("SCORE :  " + CommandCenter.getScore(), nFontWidth, nFontHeight);
-		} else {
-			g.drawString("NO SCORE", nFontWidth, nFontHeight);
+		if (CommandCenter.getScore() != 0 || CommandCenter.isPlaying()) {
+			g.drawString("SCORE :  " + CommandCenter.getScore() + "   Shield : " + CommandCenter.getFalcon().getShieldTime()+  "   Cruise : " + CommandCenter.getFalcon().getIntervalTime(), nFontWidth, nFontHeight);
 		}
+//        else {
+//			g.drawString("NO SCORE", nFontWidth, nFontHeight);
+//		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -81,10 +90,18 @@ import edu.uchicago.cs.java.finalproject.game.model.Movable;
 			grpOff = imgOff.getGraphics();
 		}
 		// Fill in background with black.
+//        String Path = "Image/background.jpg";
+//        try {
+//            myImage = ImageIO.read(new File(Path));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        grpOff.drawImage(myImage,0,0,Game.DIM.width, Game.DIM.height,Color.black,null);
 		grpOff.setColor(Color.black);
 		grpOff.fillRect(0, 0, Game.DIM.width, Game.DIM.height);
 
 		drawScore(grpOff);
+
 		
 		if (!CommandCenter.isPlaying()) {
 			displayTextOnScreen();
@@ -107,6 +124,8 @@ import edu.uchicago.cs.java.finalproject.game.model.Movable;
 			
 			
 			drawNumberShipsLeft(grpOff);
+            drawNumberShieldLeft(grpOff);
+            drawNumberMissilesLeft(grpOff);
 			if (CommandCenter.isGameOver()) {
 				CommandCenter.setPlaying(false);
 				//bPlaying = false;
@@ -163,6 +182,75 @@ import edu.uchicago.cs.java.finalproject.game.model.Movable;
 			g.drawPolygon(nXs, nYs, nLen);
 		} 
 	}
+
+     private void drawNumberShieldLeft(Graphics g) {
+         Shield shield = CommandCenter.getFalcon().getRealShield();
+                 double[] dLens = shield.getLengths();
+                 int nLen = shield.getDegrees().length;
+                 Point[] pntMs = new Point[nLen];
+                 int[] nXs = new int[nLen];
+                 int[] nYs = new int[nLen];
+                 //convert to cartesean points
+                 for (int nC = 0; nC < nLen; nC++) {
+                     pntMs[nC] = new Point((int) (10 * dLens[nC] * Math.sin(Math
+                             .toRadians(90) + shield.getDegrees()[nC])),
+                             (int) (10 * dLens[nC] * Math.cos(Math.toRadians(90)
+                                     + shield.getDegrees()[nC])));
+                 }
+
+                 //set the color to white
+                 g.setColor(Color.white);
+                 //for each falcon left (not including the one that is playing)
+                 for (int nD = 1; nD < CommandCenter.getFalcon().getShield(); nD++) {
+                     //create x and y values for the objects to the bottom right using cartesean points again
+                     for (int nC = 0; nC < shield.getDegrees().length; nC++) {
+                         nXs[nC] = pntMs[nC].x + Game.DIM.width - (20 * nD);
+                         nYs[nC] = pntMs[nC].y + Game.DIM.height - 60;
+                     }
+                     g.drawPolygon(nXs, nYs, nLen);
+
+             }
+         }
+
+
+
+    private void drawNumberMissilesLeft(Graphics g) {
+        //Falcon fal = CommandCenter.getFalcon();
+
+        for (Movable movFloater : CommandCenter.movFloaters)
+        {
+            if(movFloater instanceof GetMissiles) {
+                GetMissiles missiles = (GetMissiles) movFloater;
+                double[] dLens = missiles.getLengths();
+                int nLen = missiles.getDegrees().length;
+                Point[] pntMs = new Point[nLen];
+                int[] nXs = new int[nLen];
+                int[] nYs = new int[nLen];
+                //convert to cartesean points
+                for (int nC = 0; nC < nLen; nC++) {
+                    pntMs[nC] = new Point((int) (10 * dLens[nC] * Math.sin(Math
+                            .toRadians(90) + missiles.getDegrees()[nC])),
+                            (int) (10 * dLens[nC] * Math.cos(Math.toRadians(90)
+                                    + missiles.getDegrees()[nC])));
+                }
+
+                //set the color to white
+                g.setColor(Color.white);
+                //for each falcon left (not including the one that is playing)
+                for (int nD = 1; nD < CommandCenter.getFalcon().getMissilesNumber()+1; nD++) {
+                    //create x and y values for the objects to the bottom right using cartesean points again
+                    for (int nC = 0; nC < missiles.getDegrees().length; nC++) {
+                        nXs[nC] = pntMs[nC].x + Game.DIM.width - (20 * nD);
+                        nYs[nC] = pntMs[nC].y + Game.DIM.height - 80;
+                    }
+                    g.drawPolygon(nXs, nYs, nLen);
+                }
+                break;
+            }
+        }
+
+
+    }
 	
 	private void initView() {
 		Graphics g = getGraphics();			// get the graphics context for the panel
@@ -209,12 +297,12 @@ import edu.uchicago.cs.java.finalproject.game.model.Movable;
 				(Game.DIM.width - fmt.stringWidth(strDisplay)) / 2, Game.DIM.height / 4
 						+ nFontHeight + 240);
 
-		strDisplay = "left index finger on 'F' for Guided Missile";
+		strDisplay = "left index finger on 'F' for Cruise";
 		grpOff.drawString(strDisplay,
 				(Game.DIM.width - fmt.stringWidth(strDisplay)) / 2, Game.DIM.height / 4
 						+ nFontHeight + 280);
 
-		strDisplay = "'Numeric-Enter' for Hyperspace";
+		strDisplay = "left index finger on 'D' for Guided Missile";
 		grpOff.drawString(strDisplay,
 				(Game.DIM.width - fmt.stringWidth(strDisplay)) / 2, Game.DIM.height / 4
 						+ nFontHeight + 320);

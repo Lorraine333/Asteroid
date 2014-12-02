@@ -26,31 +26,46 @@ public class Cruise extends Sprite {
 		ArrayList<Point> pntCs = new ArrayList<Point>();
 
 
-		pntCs.add(new Point(0, 5));
-		pntCs.add(new Point(1, 3));
-		pntCs.add(new Point(1, 0));
-		pntCs.add(new Point(6, 0));
-		pntCs.add(new Point(6, -1));
-		pntCs.add(new Point(1, -1));
-		pntCs.add(new Point(1, -2));
+//		pntCs.add(new Point(0, 5));
+//		pntCs.add(new Point(1, 3));
+//		pntCs.add(new Point(1, 0));
+//		pntCs.add(new Point(6, 0));
+//		pntCs.add(new Point(6, -1));
+//		pntCs.add(new Point(1, -1));
+//		pntCs.add(new Point(1, -2));
+//
+//		pntCs.add(new Point(-1, -2));
+//		pntCs.add(new Point(-1, -1));
+//		pntCs.add(new Point(-6, -1));
+//		pntCs.add(new Point(-6, 0));
+//		pntCs.add(new Point(-1, 0));
+//		pntCs.add(new Point(-1, 3));
+        pntCs.add(new Point(0,5));
 
-		pntCs.add(new Point(-1, -2));
-		pntCs.add(new Point(-1, -1));
-		pntCs.add(new Point(-6, -1));
-		pntCs.add(new Point(-6, 0));
-		pntCs.add(new Point(-1, 0));
-		pntCs.add(new Point(-1, 3));
+        pntCs.add(new Point(1,0));
+        pntCs.add(new Point(2,5));
+        pntCs.add(new Point(3,0));
+        pntCs.add(new Point(2,-1));
+        pntCs.add(new Point(1,0));
+        pntCs.add(new Point(0,-1));
+
+        pntCs.add(new Point(-1,0));
+        pntCs.add(new Point(-2,-1));
+        pntCs.add(new Point(-3,0));
+        pntCs.add(new Point(-2,5));
+        pntCs.add(new Point(-1,0));
+
 		assignPolarPoints(pntCs);
 		
 		
 		//these are alt points
-		ArrayList<Point> pntAs = new ArrayList<Point>();
-		pntAs.add(new Point(0, 5));
-		pntAs.add(new Point(1, 3));
-		pntAs.add(new Point(1, -2));
-		pntAs.add(new Point(-1, -2));
-		pntAs.add(new Point(-1, 3));
-		assignPolorPointsAlts(pntAs);
+//		ArrayList<Point> pntAs = new ArrayList<Point>();
+//		pntAs.add(new Point(0, 5));
+//		pntAs.add(new Point(1, 3));
+//		pntAs.add(new Point(1, -2));
+//		pntAs.add(new Point(-1, -2));
+//		pntAs.add(new Point(-1, 3));
+//		assignPolorPointsAlts(pntAs);
 
 		//a cruis missile expires after 25 frames
 		setExpire(MAX_EXPIRE);
@@ -94,38 +109,38 @@ public class Cruise extends Sprite {
 	@Override
 	public void draw(Graphics g){
 		
-		if (getExpire() < MAX_EXPIRE -5)
+		//if (getExpire() < MAX_EXPIRE -5)
 			super.draw(g);
-		else{ 
-			drawAlt(g);
-		}
+		//else{
+			//drawAlt(g);
+		//}
 		
 	}
 	
 	
 
-    public void drawAlt(Graphics g) {
-    	setXcoords( new int[dDegreesAlts.length]);
-    	setYcoords( new int[dDegreesAlts.length]);
-        setObjectPoints( new Point[dDegrees.length]);
-
-        for (int nC = 0; nC < dDegreesAlts.length; nC++) {
-        	
-        	setXcoord((int) (getCenter().x + getRadius() 
-                    * dLengthsAlts[nC] 
-                    * Math.sin(Math.toRadians(getOrientation()) + dDegreesAlts[nC])), nC);
-        	
-
-        	setYcoord((int) (getCenter().y - getRadius()
-                            * dLengthsAlts[nC]
-                            * Math.cos(Math.toRadians(getOrientation()) + dDegreesAlts[nC])), nC);
-            //need this line of code to create the points which we will need for debris
-        	setObjectPoint( new Point(getXcoord(nC), getYcoord(nC)), nC);
-        }
-        
-        g.setColor(Color.DARK_GRAY);
-        g.drawPolygon(getXcoords(), getYcoords(), dDegreesAlts.length);
-    }
+//    public void drawAlt(Graphics g) {
+//    	setXcoords( new int[dDegreesAlts.length]);
+//    	setYcoords( new int[dDegreesAlts.length]);
+//        setObjectPoints( new Point[dDegrees.length]);
+//
+//        for (int nC = 0; nC < dDegreesAlts.length; nC++) {
+//
+//        	setXcoord((int) (getCenter().x + getRadius()
+//                    * dLengthsAlts[nC]
+//                    * Math.sin(Math.toRadians(getOrientation()) + dDegreesAlts[nC])), nC);
+//
+//
+//        	setYcoord((int) (getCenter().y - getRadius()
+//                            * dLengthsAlts[nC]
+//                            * Math.cos(Math.toRadians(getOrientation()) + dDegreesAlts[nC])), nC);
+//            //need this line of code to create the points which we will need for debris
+//        	setObjectPoint( new Point(getXcoord(nC), getYcoord(nC)), nC);
+//        }
+//
+//        g.setColor(Color.DARK_GRAY);
+//        g.drawPolygon(getXcoords(), getYcoords(), dDegreesAlts.length);
+//    }
 
 
 	//override the expire method - once an object expires, then remove it from the arrayList.
