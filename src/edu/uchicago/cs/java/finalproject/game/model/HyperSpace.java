@@ -97,7 +97,7 @@ public class HyperSpace extends Sprite {
         //fill this polygon (with whatever color it has)
         g.fillPolygon(getXcoords(), getYcoords(), dDegrees.length);
         //now draw a white border
-        g.setColor(Color.white);
+        g.setColor(Color.yellow);
         g.drawPolygon(getXcoords(), getYcoords(), dDegrees.length);
     }
 }

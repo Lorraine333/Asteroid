@@ -34,11 +34,12 @@ public class Explosion extends MoveAdapter{
 
     @Override
     public void draw(Graphics g) {
-       // super.draw(g);
         g.setColor(new Color(Game.R.nextInt(256), Game.R.nextInt(256),Game.R.nextInt(256)));
-        //g.setColor(new Color(0,0,255));
         g.fillOval(pntCenter.x - nRadius/2, pntCenter.y - nRadius/ 2, nRadius , nRadius);
-        //g.fillOval(pntCenter.x , pntCenter.y , nRadius , nRadius);
+        //g.fillOval(pntCenter.x - nRadius/2, pntCenter.y - nRadius/ 2, nRadius-10 , nRadius-10);
+        //for (int i = 0; i < 20 ; i++) {
+            //g.fillOval(pntCenter.x, pntCenter.y, nRadius-15 , nRadius-15);
+        //}
     }
 
     @Override

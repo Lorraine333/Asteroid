@@ -1,9 +1,6 @@
 package edu.uchicago.cs.java.finalproject.game.model;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Point;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -290,11 +287,13 @@ public abstract class Sprite implements Movable {
             //need this line of code to create the points which we will need for debris
             pntCoords[nC] = new Point(nXCoords[nC], nYCoords[nC]);
         }
-        
-        
-        
 
-		
+
+
+
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setStroke(new BasicStroke(3));
         
         g.setColor(getColor());
         g.drawPolygon(getXcoords(), getYcoords(), dDegrees.length);

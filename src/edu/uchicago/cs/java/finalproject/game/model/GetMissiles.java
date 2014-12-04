@@ -1,6 +1,7 @@
 package edu.uchicago.cs.java.finalproject.game.model;
 
 import edu.uchicago.cs.java.finalproject.controller.Game;
+import sun.awt.image.PNGImageDecoder;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -23,7 +24,11 @@ public class GetMissiles extends Sprite {
         pntCs.add(new Point(1,4));
         pntCs.add(new Point(1,-1));
         pntCs.add(new Point(2,-2));
+        pntCs.add(new Point(1,-2));
+        pntCs.add(new Point(1,-4));
 
+        pntCs.add(new Point(-1,-4));
+        pntCs.add(new Point(-1,-2));
         pntCs.add(new Point(-2,-2));
         pntCs.add(new Point(-1,-1));
         pntCs.add(new Point(-1,4));
@@ -96,7 +101,7 @@ public class GetMissiles extends Sprite {
         //fill this polygon (with whatever color it has)
         g.fillPolygon(getXcoords(), getYcoords(), dDegrees.length);
         //now draw a white border
-        g.setColor(Color.white);
+        g.setColor(Color.green);
         g.drawPolygon(getXcoords(), getYcoords(), dDegrees.length);
     }
 }

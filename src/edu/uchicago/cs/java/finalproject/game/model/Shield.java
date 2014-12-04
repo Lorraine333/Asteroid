@@ -91,7 +91,7 @@ public class Shield extends Sprite {
         //fill this polygon (with whatever color it has)
         g.fillPolygon(getXcoords(), getYcoords(), dDegrees.length);
         //now draw a white border
-        g.setColor(Color.white);
+        g.setColor(Color.orange);
         g.drawPolygon(getXcoords(), getYcoords(), dDegrees.length);
     }
 }

@@ -205,7 +205,7 @@ public class GamePanel extends Panel {
                      //create x and y values for the objects to the bottom right using cartesean points again
                      for (int nC = 0; nC < shield.getDegrees().length; nC++) {
                          nXs[nC] = pntMs[nC].x + Game.DIM.width - (20 * nD);
-                         nYs[nC] = pntMs[nC].y + Game.DIM.height - 60;
+                         nYs[nC] = pntMs[nC].y + Game.DIM.height - 70;
                      }
                      g.drawPolygon(nXs, nYs, nLen);
 
@@ -241,7 +241,7 @@ public class GamePanel extends Panel {
                     //create x and y values for the objects to the bottom right using cartesean points again
                     for (int nC = 0; nC < missiles.getDegrees().length; nC++) {
                         nXs[nC] = pntMs[nC].x + Game.DIM.width - (20 * nD);
-                        nYs[nC] = pntMs[nC].y + Game.DIM.height - 80;
+                        nYs[nC] = pntMs[nC].y + Game.DIM.height - 100;
                     }
                     g.drawPolygon(nXs, nYs, nLen);
                 }

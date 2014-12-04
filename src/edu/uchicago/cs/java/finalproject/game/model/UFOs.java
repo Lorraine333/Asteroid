@@ -12,13 +12,8 @@ import java.util.Arrays;
 public class UFOs extends Sprite{
     private int nSpin;
 
-    //radius of a large asteroid
     private final int RAD = 70;
 
-    //nSize determines if the Asteroid is Large (0), Medium (1), or Small (2)
-    //when you explode a Large asteroid, you should spawn 2 or 3 medium asteroids
-    //same for medium asteroid, you should spawn small asteroids
-    //small asteroids get blasted into debris
     public UFOs(int nSize){
 
         //call Sprite constructor
@@ -132,12 +127,6 @@ public class UFOs extends Sprite{
 
         assignPolarPoints(pntCs);
 
-        //an nSize of zero is a big asteroid
-        //a nSize of 1 or 2 is med or small asteroid respectively
-
-
-
-        //setRadius(RAD/(nSizeNew * 2));
         setCenter(UFOExploded.getCenter());
 
 

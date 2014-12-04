@@ -15,7 +15,7 @@ public class Falcon extends Sprite {
 	// FIELDS 
 	// ==============================================================
 	
-	private final double THRUST = 15.15;
+	private final double THRUST = 20.00;
 
 	final int DEGREE_STEP = 10;
 	
@@ -142,27 +142,27 @@ public class Falcon extends Sprite {
 		setColor(Color.white);
 		
 		//put falcon in the middle.
-		//setCenter(new Point(Game.DIM.width / 2, Game.DIM.height / 2));
+		setCenter(new Point(Game.DIM.width / 2, Game.DIM.height / 2));
 
         //hyperspace
-        setCenter(new Point(Game.R.nextInt(Game.DIM.width), Game.R.nextInt(Game.DIM.height)));
+        //setCenter(new Point(Game.R.nextInt(Game.DIM.width), Game.R.nextInt(Game.DIM.height)));
 		
 		//with random orientation
-		setOrientation(Game.R.nextInt(360));
-        //setOrientation(270);
+		//setOrientation(Game.R.nextInt(360));
+        setOrientation(270);
 		
 		//this is the size of the falcon
 		setRadius(50);
 
         setbSuper(false);
-        setMissilesNumber(1);
+        setMissilesNumber(0);
 
         setbShield(false);
         setbCruise(false);
         setIntervalTime(5);
         setShield(3);
 		//these are falcon specific
-		setProtected(false);
+		setProtected(true);
 		setFadeValue(0);
         shield = new Shield();
 	}
@@ -236,12 +236,12 @@ public class Falcon extends Sprite {
 
 		//does the fading at the beginning or after hyperspace
 		Color colShip;
-//		if (getFadeValue() == 255) {
+		if (getFadeValue() == 255) {
 			colShip = Color.white;
-//		} else {
-//			colShip = new Color(adjustColor(getFadeValue(), 200), adjustColor(
-//					getFadeValue(), 175), getFadeValue());
-//		}
+		} else {
+			colShip = new Color(adjustColor(getFadeValue(), 200), adjustColor(
+					getFadeValue(), 175), getFadeValue());
+		}
 
 		//shield on
 		if (bShield && getShieldTime()>0) {
@@ -281,7 +281,12 @@ public class Falcon extends Sprite {
 
 		//thrusting
 		if (bFlame) {
-			g.setColor(colShip);
+
+
+            Graphics2D g2d = (Graphics2D) g;
+            Paint paint=new GradientPaint(0, 0, Color.RED, 50,50, Color.ORANGE, true);
+            g2d.setPaint(paint);
+
 			//the flame
 			for (int nC = 0; nC < FLAME.length; nC++) {
 				if (nC % 2 != 0) //odd
@@ -315,7 +320,7 @@ public class Falcon extends Sprite {
 
 			} //end assign flame points
 
-			g.setColor( Color.white );
+			//g.setColor( Color.white );
 			g.fillPolygon(nXFlames, nYFlames, FLAME.length);
 
 		} //end if flame
@@ -324,6 +329,8 @@ public class Falcon extends Sprite {
         if(isbSuper() && getMissilesNumber()>0)
         {
             ArrayList<Point> pntCs = new ArrayList<Point>();
+
+            g.setColor(colShip);
 
             // top of ship
             pntCs.add(new Point(0, 5));
@@ -367,8 +374,8 @@ public class Falcon extends Sprite {
             pntCs.add(new Point(-1, 3));
             pntCs.add(new Point(-1, 4));
 
+            drawShipWithColor(g, colShip);
             assignPolarPoints(pntCs);
-            setColor(Color.red);
             setCenter(getCenter());
             setRadius(50);
         }
@@ -376,6 +383,7 @@ public class Falcon extends Sprite {
         {
             ArrayList<Point> pntCs = new ArrayList<Point>();
 
+            g.setColor(colShip);
             // top of ship
             pntCs.add(new Point(0, 18));
 
@@ -403,8 +411,7 @@ public class Falcon extends Sprite {
 
 
             assignPolarPoints(pntCs);
-
-            setColor(Color.white);
+            drawShipWithColor(g, colShip);
             setCenter(getCenter());
             setRadius(50);
         }

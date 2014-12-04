@@ -393,8 +393,8 @@ public class Game implements Runnable, KeyListener {
     private void spawnHyperSpace() {
         //make the appearance of power-up dependent upon ticks and levels
         //the higher the level the more frequent the appearance
-        if (nTick % (SPAWN_NEW_SHIP_FLOATER - nLevel * 7) == 0) {
-            //if (nTick % 50 == 0){
+        //if (nTick % (SPAWN_NEW_SHIP_FLOATER - nLevel * 20) == 0) {
+            if (nTick % 300 == 0){
             CommandCenter.movFloaters.add(new HyperSpace());
         }
     }

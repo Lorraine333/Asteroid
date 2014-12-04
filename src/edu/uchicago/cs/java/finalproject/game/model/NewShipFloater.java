@@ -109,7 +109,7 @@ public class NewShipFloater extends Sprite {
 		//fill this polygon (with whatever color it has)
 		g.fillPolygon(getXcoords(), getYcoords(), dDegrees.length);
 		//now draw a white border
-		g.setColor(Color.white);
+		g.setColor(Color.blue);
 		g.drawPolygon(getXcoords(), getYcoords(), dDegrees.length);
 	}
 
