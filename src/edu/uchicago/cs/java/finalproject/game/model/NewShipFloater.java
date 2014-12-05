@@ -45,7 +45,7 @@ public class NewShipFloater extends Sprite {
 
 		setExpire(250);
 		setRadius(40);
-		setColor(Color.BLUE);
+		setColor(Color.CYAN);
 
 
 		int nX = Game.R.nextInt(10);
@@ -109,7 +109,7 @@ public class NewShipFloater extends Sprite {
 		//fill this polygon (with whatever color it has)
 		g.fillPolygon(getXcoords(), getYcoords(), dDegrees.length);
 		//now draw a white border
-		g.setColor(Color.blue);
+		g.setColor(Color.CYAN);
 		g.drawPolygon(getXcoords(), getYcoords(), dDegrees.length);
 	}
 

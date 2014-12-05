@@ -1,13 +1,6 @@
 package edu.uchicago.cs.java.finalproject.game.view;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Panel;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
@@ -37,10 +30,10 @@ public class GamePanel extends Panel {
 	private Graphics grpOff;
 	
 	private GameFrame gmf;
-	private Font fnt = new Font("SansSerif", Font.BOLD, 12);
-	private Font fntBig = new Font("SansSerif", Font.BOLD + Font.ITALIC, 36);
-	private FontMetrics fmt; 
-	private int nFontWidth;
+	private Font fnt = new Font("SansSerif", Font.BOLD, 15);
+	private Font fntBig = new Font("SansSerif", Font.BOLD+Font.ITALIC, 30);
+	private FontMetrics fmt;
+    private int nFontWidth;
 	private int nFontHeight;
 	private String strDisplay = "";
 
@@ -90,20 +83,23 @@ public class GamePanel extends Panel {
 			grpOff = imgOff.getGraphics();
 		}
 		// Fill in background with black.
-//        String Path = "Image/background.jpg";
-//        try {
-//            myImage = ImageIO.read(new File(Path));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        grpOff.drawImage(myImage,0,0,Game.DIM.width, Game.DIM.height,Color.black,null);
-		grpOff.setColor(Color.black);
+        Graphics2D g2d = (Graphics2D) grpOff;
+        Paint paint=new GradientPaint(0, 0, Color.BLACK, 200,200, Color.BLUE, true);
+        g2d.setPaint(paint);
+		//grpOff.setColor(Color.black);
 		grpOff.fillRect(0, 0, Game.DIM.width, Game.DIM.height);
 
 		drawScore(grpOff);
 
 		
 		if (!CommandCenter.isPlaying()) {
+                    String Path = "Image/picture.jpg";
+        try {
+            myImage = ImageIO.read(new File(Path));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        grpOff.drawImage(myImage,0,0,Game.DIM.width, Game.DIM.height,Color.black,null);
 			displayTextOnScreen();
 		} else if (CommandCenter.isPaused()) {
 			strDisplay = "Game Paused";
@@ -254,7 +250,7 @@ public class GamePanel extends Panel {
 	
 	private void initView() {
 		Graphics g = getGraphics();			// get the graphics context for the panel
-		g.setFont(fnt);						// take care of some simple font stuff
+		g.setFont(fnt);						//take care of some simple font stuff
 		fmt = g.getFontMetrics();
 		nFontWidth = fmt.getMaxAdvance();
 		nFontHeight = fmt.getHeight();
@@ -264,16 +260,20 @@ public class GamePanel extends Panel {
 	// This method draws some text to the middle of the screen before/after a game
 	private void displayTextOnScreen() {
 
-		strDisplay = "GAME OVER";
-		grpOff.drawString(strDisplay,
-				(Game.DIM.width - fmt.stringWidth(strDisplay)) / 2, Game.DIM.height / 4);
+		strDisplay = "Welcome To Mission Impossible";
 
-		strDisplay = "use the arrow keys to turn and thrust";
+        grpOff.setColor(Color.white);
+        grpOff.setFont(fntBig);
+		grpOff.drawString(strDisplay,
+				(Game.DIM.width - fmt.stringWidth(strDisplay)) / 2-110, Game.DIM.height / 4);
+
+        grpOff.setFont(fnt);
+		strDisplay = "use the arrow keys to turn and go forward";
 		grpOff.drawString(strDisplay,
 				(Game.DIM.width - fmt.stringWidth(strDisplay)) / 2, Game.DIM.height / 4
 						+ nFontHeight + 40);
 
-		strDisplay = "use the space bar to fire";
+		strDisplay = "use the space bar to fire bullet";
 		grpOff.drawString(strDisplay,
 				(Game.DIM.width - fmt.stringWidth(strDisplay)) / 2, Game.DIM.height / 4
 						+ nFontHeight + 80);
@@ -292,20 +292,27 @@ public class GamePanel extends Panel {
 		grpOff.drawString(strDisplay,
 				(Game.DIM.width - fmt.stringWidth(strDisplay)) / 2, Game.DIM.height / 4
 						+ nFontHeight + 200);
-		strDisplay = "left pinkie on 'A' for Shield";
+		strDisplay = "Press 'A' for Shield";
 		grpOff.drawString(strDisplay,
 				(Game.DIM.width - fmt.stringWidth(strDisplay)) / 2, Game.DIM.height / 4
 						+ nFontHeight + 240);
 
-		strDisplay = "left index finger on 'F' for Cruise";
+		strDisplay = "Press 'F' for Cruise";
 		grpOff.drawString(strDisplay,
 				(Game.DIM.width - fmt.stringWidth(strDisplay)) / 2, Game.DIM.height / 4
 						+ nFontHeight + 280);
 
-		strDisplay = "left index finger on 'D' for Guided Missile";
+		strDisplay = "Press D for Immortality Guided Missile";
 		grpOff.drawString(strDisplay,
 				(Game.DIM.width - fmt.stringWidth(strDisplay)) / 2, Game.DIM.height / 4
 						+ nFontHeight + 320);
+
+        strDisplay = "Press E for HyperSpace";
+        grpOff.drawString(strDisplay,
+                (Game.DIM.width - fmt.stringWidth(strDisplay)) / 2, Game.DIM.height / 4
+                        + nFontHeight + 320);
+
+        grpOff.setColor(Color.WHITE);
 	}
 	
 	public GameFrame getFrm() {return this.gmf;}

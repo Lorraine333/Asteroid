@@ -49,7 +49,7 @@ public class Game implements Runnable, KeyListener {
 	// for possible future use
 	 Missile = 68, 					// d key
 	 SHIELD = 65, 				// a key arrow
-	// NUM_ENTER = 10, 				// hyp
+	 HyperSpace = 69, 				// hyper space
 	 SPECIAL = 70; 					// fire special weapon;  F key
 
 	private Clip clpThrust;
@@ -622,6 +622,9 @@ public class Game implements Runnable, KeyListener {
                     CommandCenter.getFalcon().setMissilesNumber(CommandCenter.getFalcon().getMissilesNumber()-1);
                 }
                 break;
+            case HyperSpace:
+                CommandCenter.getFalcon().setCenter(new Point(R.nextInt(Game.DIM.width), R.nextInt(Game.DIM.height)));
+
 
 				
 			default:
