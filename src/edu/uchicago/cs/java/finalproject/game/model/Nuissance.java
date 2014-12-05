@@ -17,19 +17,29 @@ public class Nuissance extends Sprite {
 
         ArrayList<Point> pntCs = new ArrayList<Point>();
         // top of ship
-        pntCs.add(new Point(5, 5));
-        pntCs.add(new Point(4,0));
-        pntCs.add(new Point(5, -5));
-        pntCs.add(new Point(0,-4));
-        pntCs.add(new Point(-5, -5));
-        pntCs.add(new Point(-4,0));
-        pntCs.add(new Point(-5, 5));
-        pntCs.add(new Point(0,4));
+        pntCs.add(new Point(0, 5));
+
+        pntCs.add(new Point(2,5));
+        pntCs.add(new Point(1, 4));
+        pntCs.add(new Point(1,1));
+        pntCs.add(new Point(5, 1));
+        pntCs.add(new Point(5,0));
+        pntCs.add(new Point(1, 0));
+        pntCs.add(new Point(0,-6));
+
+        pntCs.add(new Point(0,-6));
+        pntCs.add(new Point(-1, 0));
+        pntCs.add(new Point(-5,0));
+        pntCs.add(new Point(-5, 1));
+        pntCs.add(new Point(-1,1));
+        pntCs.add(new Point(-1, 4));
+        pntCs.add(new Point(-2,5));
+
 
         assignPolarPoints(pntCs);
 
         setExpire(250);
-        setRadius(30);
+        setRadius(80);
         setColor(Color.RED);
 
 
@@ -94,7 +104,7 @@ public class Nuissance extends Sprite {
         //fill this polygon (with whatever color it has)
         g.fillPolygon(getXcoords(), getYcoords(), dDegrees.length);
         //now draw a white border
-        g.setColor(Color.WHITE);
+        g.setColor(Color.red);
         g.drawPolygon(getXcoords(), getYcoords(), dDegrees.length);
     }
 }

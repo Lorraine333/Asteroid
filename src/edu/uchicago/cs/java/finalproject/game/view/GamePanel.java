@@ -67,7 +67,12 @@ public class GamePanel extends Panel {
 		g.setColor(Color.white);
 		g.setFont(fnt);
 		if (CommandCenter.getScore() != 0 || CommandCenter.isPlaying()) {
-			g.drawString("SCORE :  " + CommandCenter.getScore() + "   Shield : " + CommandCenter.getFalcon().getShieldTime()+  "   Cruise : " + CommandCenter.getFalcon().getIntervalTime(), nFontWidth, nFontHeight);
+            if(CommandCenter.getFalcon().getIntervalTime()>0){
+                g.drawString("SCORE :  " + CommandCenter.getScore() + "   Shield : " + CommandCenter.getFalcon().getShieldTime()+  "   Cruise : " + CommandCenter.getFalcon().getIntervalTime(), nFontWidth, nFontHeight);
+            }
+            else {
+                g.drawString("SCORE :  " + CommandCenter.getScore() + "   Shield : " + CommandCenter.getFalcon().getShieldTime() + "   Fire Cruise Now ", nFontWidth, nFontHeight);
+            }
 		}
 //        else {
 //			g.drawString("NO SCORE", nFontWidth, nFontHeight);

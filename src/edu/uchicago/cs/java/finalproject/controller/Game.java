@@ -115,9 +115,10 @@ public class Game implements Runnable, KeyListener {
 			spawnNewShipFloater();
             spawnShield();
             spawnHyperSpace();
-            //spawnNuissance();
+            spawnNuiBullets();
             spawnGetMissiles();
-            //spawnUFOs();
+
+
 
 
 			gmpPanel.update(gmpPanel.getGraphics()); // update takes the graphics context we must 
@@ -290,7 +291,7 @@ public class Game implements Runnable, KeyListener {
 				//spawn three small Asteroids
 				tupMarkForAdds.add(new Tuple(CommandCenter.movFoes,new Asteroid(astExploded)));
 				tupMarkForAdds.add(new Tuple(CommandCenter.movFoes,new Asteroid(astExploded)));
-                tupMarkForAdds.add(new Tuple(CommandCenter.movFoes,new Asteroid(astExploded)));
+                //tupMarkForAdds.add(new Tuple(CommandCenter.movFoes,new Asteroid(astExploded)));
                 tupMarkForRemovals.add(new Tuple(CommandCenter.movFoes, movFoe));
 			}
             else {
@@ -312,7 +313,7 @@ public class Game implements Runnable, KeyListener {
 
             tupMarkForRemovals.add(new Tuple(CommandCenter.movFoes, movFoe));
             //tupMarkForAdds.add(new Tuple(CommandCenter.movDebris,new Explosion(nuiExploded)));
-            CommandCenter.setScore(CommandCenter.getScore() + 20);
+            CommandCenter.setScore(CommandCenter.getScore() + 30);
 
         }
         else if (movFoe instanceof UFOs)
@@ -335,7 +336,7 @@ public class Game implements Runnable, KeyListener {
             else if (UFOExploded.getSize() ==3 ){
                 tupMarkForAdds.add(new Tuple(CommandCenter.movFoes,new UFOs(UFOExploded)));
                 tupMarkForAdds.add(new Tuple(CommandCenter.movFoes,new UFOs(UFOExploded)));
-                tupMarkForAdds.add(new Tuple(CommandCenter.movFoes,new UFOs(UFOExploded)));
+               // tupMarkForAdds.add(new Tuple(CommandCenter.movFoes,new UFOs(UFOExploded)));
                 tupMarkForRemovals.add(new Tuple(CommandCenter.movFoes, movFoe));
 
             }
@@ -348,6 +349,7 @@ public class Game implements Runnable, KeyListener {
 
 
         }
+
 		//not an asteroid
 		else {
 			//remove the original Foe
@@ -376,9 +378,12 @@ public class Game implements Runnable, KeyListener {
 		return nTick;
 	}
 
-    private void spawnNuissance(){
-        if (nTick % 100 == 0){
-            CommandCenter.movFoes.add(new Nuissance());
+    private void spawnNuissance(int number){
+        if (number > 0){
+            if(CommandCenter.getLevel()>3) {
+                CommandCenter.movFoes.add(new Nuissance());
+                number--;
+            }
         }
     }
 	private void spawnNewShipFloater() {
@@ -415,13 +420,7 @@ public class Game implements Runnable, KeyListener {
         }
     }
 
-    private void spawnUFOs(int number)
-    {
-        for (int i = 0; i <number ; i++) {
-            CommandCenter.movFoes.add(new UFOs(0));
-        }
 
-    }
 
 	// Called when user presses 's'
 	private void startGame() {
@@ -442,6 +441,29 @@ public class Game implements Runnable, KeyListener {
 			CommandCenter.movFoes.add(new Asteroid(0));
 		}
 	}
+
+    private void spawnUFOs(int number)
+    {
+        for (int i = 0; i <number ; i++) {
+            CommandCenter.movFoes.add(new UFOs(0));
+        }
+
+    }
+
+    private void spawnNuiBullets() {
+        if (nTick % 100 ==0) {
+            if(CommandCenter.getLevel()>3) {
+                for (Movable movFoe : CommandCenter.movFoes) {
+                    if (movFoe instanceof Nuissance) {
+                        Nuissance nuissance = (Nuissance) movFoe;
+                        CommandCenter.movFoes.add(new Bullet(nuissance));
+                        break;
+                    }
+                }
+            }
+        }
+
+    }
 
 	
 	
@@ -478,6 +500,9 @@ public class Game implements Runnable, KeyListener {
 			
 			spawnAsteroids(CommandCenter.getLevel() + 2);
             spawnUFOs(CommandCenter.getLevel());
+            //you won't get a Nuissance until you are already level 4
+            spawnNuissance(CommandCenter.getLevel()-3);
+
 			CommandCenter.setLevel(CommandCenter.getLevel() + 1);
             CommandCenter.setScore(0);
             if(CommandCenter.getLevel()>1) {
@@ -546,6 +571,7 @@ public class Game implements Runnable, KeyListener {
 			}
 		}
 	}
+
 
 	@Override
 	public void keyReleased(KeyEvent e) {
