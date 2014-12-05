@@ -21,7 +21,9 @@ HyperSpace is also a floater, when falcon have a collosion with HyperSpace, the 
 Missiles is a kind of immortality guided missles. When you got this one, you can press 'D' to use it. Basiclly, it will
 fire to every foes still alive, and directly to its'location. Since sometime foe can move maybe faster than missiles, it
 may take time to kill this foe. Considering this condition, this missile can last a long time until it hit a foe.
-Powerful Weapon
+
+This is Powerful Weapon. So every time you are using this weapon, the falcon will reshape. Until there is no more weapon
+for this falcon, falcon will be in the same as before.
 
 (6)
 NewShipFloater, this floater can increate the number of falcons for this game

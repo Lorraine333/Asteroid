@@ -379,11 +379,8 @@ public class Game implements Runnable, KeyListener {
 	}
 
     private void spawnNuissance(int number){
-        if (number > 0){
-            if(CommandCenter.getLevel()>3) {
-                CommandCenter.movFoes.add(new Nuissance());
-                number--;
-            }
+        for (int i = 0; i < number; i++) {
+            CommandCenter.movFoes.add(new Nuissance());
         }
     }
 	private void spawnNewShipFloater() {
@@ -499,9 +496,10 @@ public class Game implements Runnable, KeyListener {
 				CommandCenter.getFalcon().setProtected(true);
 			
 			spawnAsteroids(CommandCenter.getLevel() + 2);
+            //you will have UFO in level 2
             spawnUFOs(CommandCenter.getLevel());
             //you won't get a Nuissance until you are already level 4
-            spawnNuissance(CommandCenter.getLevel()-3);
+            spawnNuissance(CommandCenter.getLevel()-2);
 
 			CommandCenter.setLevel(CommandCenter.getLevel() + 1);
             CommandCenter.setScore(0);
