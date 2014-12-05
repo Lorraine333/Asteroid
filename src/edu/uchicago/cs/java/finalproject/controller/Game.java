@@ -350,6 +350,7 @@ public class Game implements Runnable, KeyListener {
 
         }
 
+
 		//not an asteroid
 		else {
 			//remove the original Foe
@@ -378,11 +379,7 @@ public class Game implements Runnable, KeyListener {
 		return nTick;
 	}
 
-    private void spawnNuissance(int number){
-        for (int i = 0; i < number; i++) {
-            CommandCenter.movFoes.add(new Nuissance());
-        }
-    }
+
 	private void spawnNewShipFloater() {
 		//make the appearance of power-up dependent upon ticks and levels
 		//the higher the level the more frequent the appearance
@@ -447,9 +444,14 @@ public class Game implements Runnable, KeyListener {
 
     }
 
+    private void spawnNuissance(int number){
+        for (int i = 0; i < number; i++) {
+            CommandCenter.movFoes.add(new Nuissance());
+        }
+    }
+
     private void spawnNuiBullets() {
-        if (nTick % 100 ==0) {
-            if(CommandCenter.getLevel()>3) {
+        if (nTick % 20 ==0) {
                 for (Movable movFoe : CommandCenter.movFoes) {
                     if (movFoe instanceof Nuissance) {
                         Nuissance nuissance = (Nuissance) movFoe;
@@ -457,7 +459,6 @@ public class Game implements Runnable, KeyListener {
                         break;
                     }
                 }
-            }
         }
 
     }
@@ -499,7 +500,7 @@ public class Game implements Runnable, KeyListener {
             //you will have UFO in level 2
             spawnUFOs(CommandCenter.getLevel());
             //you won't get a Nuissance until you are already level 4
-            spawnNuissance(CommandCenter.getLevel()-2);
+            spawnNuissance(CommandCenter.getLevel()-1);
 
 			CommandCenter.setLevel(CommandCenter.getLevel() + 1);
             CommandCenter.setScore(0);

@@ -11,9 +11,11 @@ import java.util.ArrayList;
 public class Nuissance extends Sprite {
     private int nSpin;
 
-    public Nuissance() {
+    public Nuissance( ) {
+
 
         super();
+
 
         ArrayList<Point> pntCs = new ArrayList<Point>();
         // top of ship
@@ -38,32 +40,27 @@ public class Nuissance extends Sprite {
 
         assignPolarPoints(pntCs);
 
+        //the spin will be either plus or minus 0-9
+        int nSpin = Game.R.nextInt(10);
+        if(nSpin %2 ==0)
+            nSpin = -nSpin;
+        setSpin(nSpin);
+
+        //random delta-x
+        int nDX = Game.R.nextInt(10);
+        if(nDX %2 ==0)
+            nDX = -nDX;
+        setDeltaX(nDX);
+
+        //random delta-y
+        int nDY = Game.R.nextInt(10);
+        if(nDY %2 ==0)
+            nDY = -nDY;
+        setDeltaY(nDY);
+
+
         setExpire(250);
-        setRadius(80);
         setColor(Color.RED);
-
-
-        int nX = Game.R.nextInt(10);
-        int nY = Game.R.nextInt(10);
-        int nS = Game.R.nextInt(5);
-
-        //set random DeltaX
-        if (nX % 2 == 0)
-            setDeltaX(nX);
-        else
-            setDeltaX(-nX);
-
-        //set rnadom DeltaY
-        if (nY % 2 == 0)
-            setDeltaX(nY);
-        else
-            setDeltaX(-nY);
-
-        //set random spin
-        if (nS % 2 == 0)
-            setSpin(nS);
-        else
-            setSpin(-nS);
 
         //random point on the screen
         setCenter(new Point(Game.R.nextInt(Game.DIM.width),
@@ -73,6 +70,7 @@ public class Nuissance extends Sprite {
         setOrientation(Game.R.nextInt(360));
 
     }
+
 
     public void move() {
         super.move();
