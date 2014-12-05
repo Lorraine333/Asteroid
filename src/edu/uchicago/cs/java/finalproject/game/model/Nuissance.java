@@ -38,29 +38,34 @@ public class Nuissance extends Sprite {
         pntCs.add(new Point(-2,5));
 
 
+
         assignPolarPoints(pntCs);
 
-        //the spin will be either plus or minus 0-9
-        int nSpin = Game.R.nextInt(10);
-        if(nSpin %2 ==0)
-            nSpin = -nSpin;
-        setSpin(nSpin);
-
-        //random delta-x
-        int nDX = Game.R.nextInt(10);
-        if(nDX %2 ==0)
-            nDX = -nDX;
-        setDeltaX(nDX);
-
-        //random delta-y
-        int nDY = Game.R.nextInt(10);
-        if(nDY %2 ==0)
-            nDY = -nDY;
-        setDeltaY(nDY);
-
-
         setExpire(250);
-        setColor(Color.RED);
+        setRadius(80);
+        setColor(Color.red);
+
+        int nX = Game.R.nextInt(10);
+        int nY = Game.R.nextInt(10);
+        int nS = Game.R.nextInt(5);
+
+        //set random DeltaX
+        if (nX % 2 == 0)
+            setDeltaX(nX);
+        else
+            setDeltaX(-nX);
+
+        //set rnadom DeltaY
+        if (nY % 2 == 0)
+            setDeltaX(nY);
+        else
+            setDeltaX(-nY);
+
+        //set random spin
+        if (nS % 2 == 0)
+            setSpin(nS);
+        else
+            setSpin(-nS);
 
         //random point on the screen
         setCenter(new Point(Game.R.nextInt(Game.DIM.width),
